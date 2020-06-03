@@ -6,6 +6,8 @@ from nltk import word_tokenize
 from nltk import re
 import docx2txt
 from tika import parser
+import requests
+from bs4 import BeautifulSoup
 
 def str2token(string_data):
     tokens = word_tokenize(string_data)
@@ -28,3 +30,15 @@ def extract_from_pdf(name_file):
     
     raw = parser.from_file(name_file)
     return(raw['content'])
+
+def extract_from_web(web):
+    webpage_response = requests.get(web)
+    webpage = webpage_response.content
+    webpage_soup = BeautifulSoup(webpage,"html.parser")
+    doc1_data = []
+    for p in webpage_soup.select("p"):
+        if not (p.getText() is None):
+            doc1_data.append(p.getText())
+    return list(filter(lambda x: not (x is None) ,doc1_data))
+    
+

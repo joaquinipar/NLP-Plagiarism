@@ -17,4 +17,5 @@
 * nltk
 * docx2txt
 * tika
+* BeautifulSoup
 
