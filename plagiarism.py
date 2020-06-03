@@ -24,7 +24,7 @@ def scrape(doc1,doc2): # Recibe los nombres de los dos archivos
     elif ".pdf" in doc2:
         doc2_data = extract_from_pdf(doc2)
     elif "http" in doc2:
-        doc1_data = extract_from_web(doc1)
+        doc2_data = extract_from_web(doc2)
     else:
         raise TypeError("Document not supported. If you inserted a webpage, make sure that it includes HTTP in the beginning.")
 
@@ -34,8 +34,15 @@ def scrape(doc1,doc2): # Recibe los nombres de los dos archivos
 
     return scraped_data
 
+
+def plagiarism(doc1,doc2):
+
+    scraped = scrape(doc1,doc2)
+    print( score_plagiarism(str(scraped[doc1]),str(scraped[doc2])))
+
 def score_plagiarism(tok1,tok2): # recibe dos tokens y devuelve un score
     token1 = str2token(tok1)
     token2 = str2token(tok2)
     return jaccard_similarity(tok1,tok2)
-    
+
+
