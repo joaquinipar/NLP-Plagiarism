@@ -9,6 +9,8 @@ from tika import parser
 import requests
 from bs4 import BeautifulSoup
 
+
+
 def str2token(string_data):
     tokens = word_tokenize(string_data)
     lowercased_tokens = list(map(lambda x: x.lower(),tokens))
@@ -29,6 +31,7 @@ def extract_from_doc(name_file):
 def extract_from_pdf(name_file):
     
     raw = parser.from_file(name_file)
+    #print(raw['content'])
     return(raw['content'])
 
 def extract_from_web(web):
@@ -41,4 +44,28 @@ def extract_from_web(web):
             doc1_data.append(p.getText())
     return list(filter(lambda x: not (x is None) ,doc1_data))
     
+def extract_title_from_web(web):
+    webpage_response = requests.get(web)
+    webpage = webpage_response.content
+    webpage_soup = BeautifulSoup(webpage,"html.parser")
+    if webpage_soup.find("title") is None: # If there's not a title, returns link
+        return web
+    return webpage_soup.find("title").string
 
+def title(doc):
+    
+    if ".doc" in doc:
+        return doc[:-4]
+    elif ".docx" in doc:
+        return doc[:-5]
+    elif ".pdf" in doc:
+        return doc[:-4]
+    elif "http" in doc:
+        return extract_title_from_web(doc)
+    else:
+        raise TypeError("Document not supported. If you inserted a webpage, make sure that it includes HTTP in the beginning.")
+
+
+#print(extract_title_from_web("https://www.reddit.com/"))
+
+#print( extract_from_pdf("Experience Economy.pdf"))
