@@ -9,6 +9,15 @@ from tika import parser
 import requests
 from bs4 import BeautifulSoup
 
+def scrape_doc(doc):
+    if ".docx" in doc: 
+        return extract_from_doc(doc)
+    elif ".pdf" in doc:
+        return extract_from_pdf(doc)
+    elif "http" in doc:
+        return extract_from_web(doc)
+    else:
+        raise TypeError("Document not supported. If you inserted a webpage, be sure that it includes HTTP in the beginning.")
 
 
 def str2token(string_data):
@@ -29,9 +38,7 @@ def extract_from_doc(name_file):
     return text
 
 def extract_from_pdf(name_file):
-    
     raw = parser.from_file(name_file)
-    #print(raw['content'])
     return(raw['content'])
 
 def extract_from_web(web):
@@ -66,6 +73,3 @@ def title(doc):
         raise TypeError("Document not supported. If you inserted a webpage, make sure that it includes HTTP in the beginning.")
 
 
-#print(extract_title_from_web("https://www.reddit.com/"))
-
-#print( extract_from_pdf("Experience Economy.pdf"))
