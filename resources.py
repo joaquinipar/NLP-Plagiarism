@@ -59,17 +59,38 @@ def extract_title_from_web(web):
         return web
     return webpage_soup.find("title").string
 
+dataset_filter_words = ["trabajo","practico","preguntas","tp"]
+
 def title(doc):
     
     if ".doc" in doc:
-        return doc[:-4]
+        return clean_title(doc[:-4].lower())
     elif ".docx" in doc:
-        return doc[:-5]
+        return clean_title(doc[:-5].lower())
     elif ".pdf" in doc:
-        return doc[:-4]
+        return clean_title(doc[:-4].lower())
     elif "http" in doc:
-        return extract_title_from_web(doc)
+        return clean_title(extract_title_from_web(doc).lower())
     else:
         raise TypeError("Document not supported. If you inserted a webpage, make sure that it includes HTTP in the beginning.")
+
+
+def clean_title(title):
+    new_title = ""
+    for word in title:
+
+        if word.isalpha() or word is ' ':
+            
+            new_title += word
+
+    
+    for forbidden_word in dataset_filter_words:
+
+        if forbidden_word in new_title:
+            new_title = new_title.replace(forbidden_word,"")
+    
+    return new_title
+
+#print(title("TP Comercio electronico preguntas.docx"))
 
 

@@ -25,25 +25,29 @@ def scrape(doc1,doc2):
 def plagiarism(doc1,doc2=None):
 
     
-
     if doc2 is None: # Checks the web
         
-        print(f"Analizing {doc1} and {doc2}")
+        title1 = title(doc1)
+        
+
+        print(f"Analizing {title1} and {doc2}")
 
         best_score = 0
         best_score_title = ""
         for j in search(title(doc1), tld="com", num=3, stop=3, pause=2): 
             
-            print(j)
-            print(title(j))
+            print("Found!")
+            print(f"Link: {j}")
+            print(f"Title: {title(j)}")
 
             if( plagiarism(doc1,j) > best_score ):
                 
                 best_score = plagiarism(doc1,j)
-                print(best_score)
+                print(f"New best score: {best_score}")
                 best_score_title = title(j)
         
-        print(f"The best score comparison is {best_score_title} with a score of {best_score}")
+        print(f"The best score comparison is '{best_score_title}' with a score of {best_score}")
+        
         return best_score
     else: # Checks given documents/links
         scraped = scrape(doc1,doc2)
@@ -52,3 +56,4 @@ def plagiarism(doc1,doc2=None):
 def calculate_score(str1,str2): 
     return nltk.jaccard_distance(set(str1),set(str2))
 
+print(plagiarism("TP Comercio electronico preguntas.docx",))
