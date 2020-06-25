@@ -8,7 +8,7 @@ from resources import *
 import requests
 from bs4 import BeautifulSoup
 from googlesearch import search
-
+import sys
 
 def scrape(doc1,doc2): 
 
@@ -56,4 +56,14 @@ def plagiarism(doc1,doc2=None):
 def calculate_score(str1,str2): 
     return nltk.jaccard_distance(set(str1),set(str2))
 
-print(plagiarism("TP Comercio electronico preguntas.docx",))
+
+
+documents = list(sys.argv)
+if( len(documents) == 1 ):
+    print("Error: At least one document/link needs to be provided.")
+    sys.exit()
+
+if(len(documents) < 3):
+    documents.append(None)
+
+plagiarism(documents[1],documents[2])

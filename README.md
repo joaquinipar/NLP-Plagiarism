@@ -9,7 +9,16 @@
 [[1]](https://link.springer.com/chapter/10.1007/978-3-319-10671-7_4)
 
 
-#### Document extensions supported
+### Usage
+
+At least one document/link name must be provided as a string. 
+
+<pre><code>
+python plagiarism.py [DOCUMENT_NAME] [OPTIONAL_DOCUMENT_NAME]
+</code></pre>
+
+
+### Document extensions supported
 
 * docx (doc not supported)
 * pdf
