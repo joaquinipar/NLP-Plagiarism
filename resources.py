@@ -8,6 +8,30 @@ import docx2txt
 from tika import parser
 import requests
 from bs4 import BeautifulSoup
+import spacy
+from spacy.lemmatizer import Lemmatizer
+
+nlp = spacy.load("es_core_news_lg")
+
+def process_text(text):
+    doc = nlp(text.lower())
+    result = []
+    for token in doc:
+        if token.text in nlp.Defaults.stop_words:
+            continue
+        if token.is_punct:
+            continue
+        if token.lemma_ == '-PRON-':
+            continue
+        result.append(token.lemma_)
+    return " ".join(result)
+
+def lemmatize_clean(tokens):
+    list1 = [ token.lemma_ for token in tokens]
+    return nlp(' '.join(list1))
+
+def preprocess(text):
+    return lemmatize_clean( nlp(process_text(text)) )
 
 def scrape_doc(doc):
     if ".docx" in doc: 
@@ -42,7 +66,7 @@ def extract_from_pdf(name_file):
     return(raw['content'])
 
 def extract_from_web(web):
-    webpage_response = requests.get(web)
+    webpage_response = requests.get(web, allow_redirects=False)
     webpage = webpage_response.content
     webpage_soup = BeautifulSoup(webpage,"html.parser")
     doc1_data = []
@@ -58,6 +82,19 @@ def extract_title_from_web(web):
     if webpage_soup.find("title") is None: # If there's not a title, returns link
         return web
     return webpage_soup.find("title").string
+
+def is_downloadable(url):
+    """
+    Does the url contain a downloadable resource
+    """
+    h = requests.head(url, allow_redirects=True)
+    header = h.headers
+    content_type = header.get('content-type')
+    if 'text' in content_type.lower():
+        return False
+    if 'html' in content_type.lower():
+        return False
+    return True
 
 dataset_filter_words = ["trabajo","practico","preguntas","tp"]
 
@@ -93,4 +130,16 @@ def clean_title(title):
 
 #print(title("TP Comercio electronico preguntas.docx"))
 
+def is_a_question(text):
 
+    if '¿' in text and '?' in text:
+        return True
+    
+    if text[0].isnumeric() and text[1] is ')':
+        return True
+    if text[0] is '¿' and text.endswith('?'):
+        return True
+    if  text[0] is '¿' and text.endswith('?.'):
+        return True
+    if text[0].isnumeric() and text[1] is ')':
+        return True

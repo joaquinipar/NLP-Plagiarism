@@ -28,10 +28,11 @@ python plagiarism.py [DOCUMENT_NAME] [OPTIONAL_DOCUMENT_NAME]
 ### Requirements
 
 * Python3
-* nltk
-* docx2txt
-* tika
-* BeautifulSoup
-* google (google 2.0.3)
+* [nltk](https://www.nltk.org/)
+* [docx2txt](https://pypi.org/project/docx2txt/)
+* [tika (Java 7+ required)](https://github.com/chrismattmann/tika-python)
+* [BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
+* [google (google 2.0.3)](https://pypi.org/project/google/)
+* [strsimpy](https://github.com/luozhouyang/python-string-similarity)
 
 

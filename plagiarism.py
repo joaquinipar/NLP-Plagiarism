@@ -9,6 +9,9 @@ import requests
 from bs4 import BeautifulSoup
 from googlesearch import search
 import sys
+from preprocessing import *
+
+
 
 def scrape(doc1,doc2): 
 
@@ -34,10 +37,13 @@ def plagiarism(doc1,doc2=None):
 
         best_score = 0
         best_score_title = ""
-        for j in search(title(doc1), tld="com", num=3, stop=3, pause=2): 
+        for j in search(title(doc1), tld="com.ar",lang='es', num=3, stop=5, pause=2): 
             
             print("Found!")
             print(f"Link: {j}")
+
+            if( is_downloadable(j) ):
+                continue
             print(f"Title: {title(j)}")
 
             if( plagiarism(doc1,j) > best_score ):
@@ -51,10 +57,32 @@ def plagiarism(doc1,doc2=None):
         return best_score
     else: # Checks given documents/links
         scraped = scrape(doc1,doc2)
-        return calculate_score(str(scraped[doc1]),str(scraped[doc2]))
+        
+        return detect_plagiarism(scraped[doc1],scraped[doc2])
+        #return calculate_score(str(scraped[doc1]),str(scraped[doc2]))
 
-def calculate_score(str1,str2): 
-    return nltk.jaccard_distance(set(str1),set(str2))
+def detect_plagiarism(string1,string2):
+
+    doc2 = nlp(string2)
+    doc1 = nlp(string1)
+    for sent2 in doc2.sents:
+
+        sent2_clean = preprocess(sent2.as_doc().text) # doc type
+    
+        for sent1 in doc1.sents:
+            sent1_clean = preprocess(sent1.as_doc().text) # doc type
+            
+            sim = sent2_clean.similarity(sent1_clean) 
+
+            if( sim > 0.9 and not is_a_question(sent1.text) and not is_a_question(sent2.text)):
+                print("--------------------------------------------------------")
+                print(f"Found possible plagiarism between: ")
+                print(sent2.text)
+                print(f"Paragraph Number: {list(doc2.sents).index(sent2)}")
+                print("and")
+                print(sent1.text)
+                print(f"Paragraph Number: {list(doc1.sents).index(sent1)}")
+                print(f"Similarity: {sim}")
 
 
 
