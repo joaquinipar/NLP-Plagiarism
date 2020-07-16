@@ -19,6 +19,8 @@ def process_text(text):
     for token in doc:
         if token.text in nlp.Defaults.stop_words:
             continue
+        if token.text == "\n":
+            continue
         if token.is_punct:
             continue
         if token.lemma_ == '-PRON-':
@@ -71,7 +73,7 @@ def extract_from_web(web):
     webpage_soup = BeautifulSoup(webpage,"html.parser")
     doc1_data = []
     for p in webpage_soup.select("p"):
-        if not (p.getText() is None):
+        if not (p.getText() is None) and not(p is None):
             doc1_data.append(p.getText())
     return list(filter(lambda x: not (x is None) ,doc1_data))
     
