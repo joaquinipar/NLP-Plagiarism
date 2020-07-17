@@ -1,6 +1,6 @@
 # NLP-Plagiarism
 
-#### Natural Language Processing project to detect plagiarism. It runs on python3 and needs several libraries in order to work.
+#### Natural Language Processing project to detect plagiarism in documents. It runs on python3 and needs several libraries in order to work.
 
 <p align="center">
 <img src="https://live.staticflickr.com/7423/11375917205_d3a610a9b3_c.jpg" width="400" height="268">
@@ -12,6 +12,7 @@
 ### Usage
 
 At least one document/link name must be provided as a string. 
+Supported languages: Spanish
 
 <pre><code>
 python plagiarism.py [DOCUMENT_NAME] [OPTIONAL_DOCUMENT_NAME]
@@ -33,6 +34,6 @@ python plagiarism.py [DOCUMENT_NAME] [OPTIONAL_DOCUMENT_NAME]
 * [tika (Java 7+ required)](https://github.com/chrismattmann/tika-python)
 * [BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
 * [google (google 2.0.3)](https://pypi.org/project/google/)
-* [strsimpy](https://github.com/luozhouyang/python-string-similarity)
+* [spacy](https://spacy.io/)
 
 
